@@ -1,0 +1,160 @@
+#!/bin/bash
+unset comm sec
+sec=`zenity  --list  --text="Neyi görüntülemek istersiniz."  \
+        --column="Seçim" "Machine hardware name" "Info about CPU and processing unit" "PCI buses and details about the devices connected to them" \
+        "Disk space of file systems" "View mounted file systems" "CPU memory information" "Information about SATA devices" "Fetch detailed block device information" \
+        "Detailed information about each USB ports" \
+        --ok-label="İleri" --cancel-label="Çıkış"`
+if [ $? = 0 ]
+then
+    if [ -z "$sec" ]
+    then
+    zenity --warning \
+                --text="Lütfen bir işlem seçiniz." \
+                --ok-label="Ana sayfaya dön" --no-wrap
+    exec ./main.sh
+    fi
+case $sec in
+    "Machine hardware name")
+    comm=$(uname -a)
+    echo $comm >> sonuc.txt
+    zenity --text-info \
+                --title="$sec" \
+                --filename=sonuc.txt --ok-label="Anladım" --cancel-label=" Çıkış"
+                rm sonuc.txt
+    if [ $? = 0 ]
+    then
+    
+    exec ./main.sh
+    else
+    exit 0
+    fi
+    ;;
+    "Info about CPU and processing unit")
+    comm=$(lscpu)
+    echo $comm >> sonuc.txt
+    cat sonuc.txt
+
+    zenity --text-info \
+                --title="$sec" \
+                --filename=sonuc.txt --ok-label="Anladım" --cancel-label=" Çıkış" --width=1280 --height=1280
+                rm sonuc.txt
+    if [ $? = 0 ]
+                then
+    
+    exec ./main.sh
+    else
+    exit 0
+    fi
+    ;;
+    "PCI buses and details about the devices connected to them")
+    comm=$(lspci)
+    echo $comm >> sonuc.txt
+    zenity --text-info \
+                --title="$sec" \
+                --filename=sonuc.txt --ok-label="Anladım" --cancel-label=" Çıkış" --width=1280 --height=1280
+                rm sonuc.txt
+    if [ $? = 0 ]
+                then
+    
+    exec ./main.sh
+    else
+    exit 0
+    fi
+    ;;
+    "Disk space of file systems")
+    comm=$(df -H)
+    echo $comm >> sonuc.txt
+    zenity --text-info \
+                --title="$sec" \
+                --filename=sonuc.txt --ok-label="Anladım" --cancel-label=" Çıkış" --width=1280 --height=1280
+                rm sonuc.txt
+    if [ $? = 0 ]
+                then
+    
+    exec ./main.sh
+    else
+    exit 0
+    fi
+    ;;
+    "View mounted file systems")
+    comm=$(mount | column -t)
+    echo $comm >> sonuc.txt
+    zenity --text-info \
+                --title="$sec" \
+                --filename=sonuc.txt --ok-label="Anladım" --cancel-label=" Çıkış" --width=1280 --height=1280
+                rm sonuc.txt
+    if [ $? = 0 ]
+                then
+    
+    exec ./main.sh
+    else
+    exit 0
+    fi
+    ;;
+    "CPU memory information")
+    comm=$(cat /proc/cpuinfo)
+    echo $comm >> sonuc.txt
+    zenity --text-info \
+                --title="$sec" \
+                --filename=sonuc.txt --ok-label="Anladım" --cancel-label=" Çıkış" --width=1280 --height=1280
+                rm sonuc.txt
+    if [ $? = 0 ]
+                then
+    
+    exec ./main.sh
+    else
+    exit 0
+    fi
+    ;;
+    "Information about SATA devices")
+    comm=$(hdparm)
+    echo $comm >> sonuc.txt
+    zenity --text-info \
+                --title="$sec" \
+                --filename=sonuc.txt --ok-label="Anladım" --cancel-label=" Çıkış" --width=1280 --height=1280
+                rm sonuc.txt
+                if [ $? = 0 ]
+                then
+    
+    exec ./main.sh
+    else
+    exit 0
+    fi
+    ;;
+    "Fetch detailed block device information")
+    comm=$(lsblk)
+    echo $comm >> sonuc.txt
+    zenity --text-info \
+                --title="$sec" \
+                --filename=sonuc.txt --ok-label="Anladım" --cancel-label=" Çıkış" --width=1280 --height=1280
+                rm sonuc.txt
+    if [ $? = 0 ]
+                then
+    
+    exec ./main.sh
+    else
+    exit 0
+    fi
+    ;;
+    "Detailed information about each USB ports")
+    comm=$(lsusb)
+    echo $comm >> sonuc.txt
+    zenity --text-info \
+                --title="$sec" \
+                --filename=sonuc.txt --ok-label="Anladım" --cancel-label=" Çıkış" --width=1280 --height=1280
+                rm sonuc.txt
+    if [ $? = 0 ]
+                then
+    
+    exec ./main.sh
+    else
+    exit 0
+    fi
+    ;;
+esac
+
+else
+exit 0
+
+fi
